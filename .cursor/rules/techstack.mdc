@@ -12,7 +12,9 @@ The tech stack for this application should only inlcude, ask before you propose 
 - Typescript
 - Tailwind
 - Shadcn UI
-- TanStack Query (React query)
+- Zustand 
+- TanStack Query / React Query 
 - TanStack Table
 - Lodash
+- Wretch
 

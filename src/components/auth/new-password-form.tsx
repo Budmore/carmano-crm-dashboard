@@ -1,13 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/Button/Button";
+import { PasswordInput } from "@/components/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "../ui/button";
-import { PasswordInput } from "../ui/password-input";
 
 const newPasswordSchema = z
   .object({
