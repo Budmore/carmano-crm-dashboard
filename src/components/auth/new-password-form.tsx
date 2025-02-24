@@ -1,25 +1,14 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/Button/Button";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useNewPassword } from "@/lib/hooks/use-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-const newPasswordSchema = z
-  .object({
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type NewPasswordValues = z.infer<typeof newPasswordSchema>;
+import { NewPasswordInput, newPasswordSchema } from "../../lib/services/auth";
 
 interface NewPasswordFormProps {
   token: string;
@@ -27,41 +16,59 @@ interface NewPasswordFormProps {
 
 export function NewPasswordForm({ token }: NewPasswordFormProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<NewPasswordValues>({
+  } = useForm<NewPasswordInput>({
     resolver: zodResolver(newPasswordSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
+      token,
     },
   });
 
-  async function onSubmit(data: NewPasswordValues) {
-    setIsLoading(true);
+  const {
+    mutate: resetPassword,
+    isLoading,
+    error,
+    isSuccess,
+  } = useNewPassword();
 
-    try {
-      // Add your password reset logic here
-      // Example:
-      // await resetPassword({
-      //   token,
-      //   password: data.password,
-      // });
-
-      router.push("/login");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+  function onSubmit(data: NewPasswordInput) {
+    resetPassword(data, {
+      onSuccess: () => {
+        // Wait a moment to show success message before redirecting
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      },
+    });
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            {error instanceof Error
+              ? error.message
+              : "Failed to reset password"}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {isSuccess && (
+        <Alert className="border-green-500 text-green-500">
+          <CheckCircle2 className="h-4 w-4" />
+          <AlertDescription>
+            Password reset successful! Redirecting to login...
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="space-y-2">
         <PasswordInput
           {...register("password")}
@@ -75,7 +82,7 @@ export function NewPasswordForm({ token }: NewPasswordFormProps) {
 
       <div className="space-y-2">
         <PasswordInput
-          {...register("password")}
+          {...register("confirmPassword")}
           label="Confirm New Password"
           id="confirmPassword"
           placeholder="Confirm your new password"

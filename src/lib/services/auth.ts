@@ -1,13 +1,15 @@
 import { z } from "zod";
 
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters");
+
 export const registerSchema = z
   .object({
     email: z.string().email("Please enter a valid email address"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .max(100, "Password must be less than 100 characters"),
-    confirmPassword: z.string(),
+
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -23,9 +25,21 @@ export const resetPasswordSchema = z.object({
   email: z.string().email(),
 });
 
+export const newPasswordSchema = z
+  .object({
+    token: z.string(),
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type NewPasswordInput = z.infer<typeof newPasswordSchema>;
 
 export interface AuthResponse {
   accessToken: string;
@@ -92,13 +106,16 @@ export const authService = {
   },
 
   async resetPassword(data: ResetPasswordInput): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/reset-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/authentication/reset-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (!response.ok) {
       const error = await response.json();
@@ -106,6 +123,23 @@ export const authService = {
     }
   },
 
+  async newPassword(data: NewPasswordInput): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/authentication/new-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to set new password");
+    }
+  },
   async confirmEmail(token: string): Promise<{ message: string }> {
     const response = await fetch(
       `${API_BASE_URL}/authentication/confirm-email`,

@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   authService,
   LoginInput,
+  NewPasswordInput,
   RegisterInput,
   ResetPasswordInput,
 } from "../services/auth";
@@ -31,5 +32,11 @@ export function useResendVerification() {
     mutationFn: async ({ email }: { email: string }) => {
       return await authService.resendVerificationEmail(email);
     },
+  });
+}
+
+export function useNewPassword() {
+  return useMutation({
+    mutationFn: (data: NewPasswordInput) => authService.newPassword(data),
   });
 }

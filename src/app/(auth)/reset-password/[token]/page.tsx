@@ -12,7 +12,11 @@ interface NewPasswordPageProps {
   };
 }
 
-export default function NewPasswordPage({ params }: NewPasswordPageProps) {
+export default async function NewPasswordPage({
+  params,
+}: NewPasswordPageProps) {
+  const { token } = await params;
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-sm w-full space-y-8">
@@ -22,7 +26,7 @@ export default function NewPasswordPage({ params }: NewPasswordPageProps) {
             Please enter your new password
           </p>
         </div>
-        <NewPasswordForm token={params.token} />
+        <NewPasswordForm token={token} />
       </div>
     </div>
   );
