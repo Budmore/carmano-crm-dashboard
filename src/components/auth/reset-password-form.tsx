@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useResetPassword } from "@/lib/hooks/use-auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { resetPassword } from "~/lib/services/auth.service";
 import {
   resetPasswordSchema,
   type ResetPasswordInput,
-} from "@/lib/services/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+} from "~/lib/validations/authValidations";
 
 export function ResetPasswordForm() {
   const {
@@ -19,10 +20,12 @@ export function ResetPasswordForm() {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const resetPassword = useResetPassword();
+  const mutation = useMutation({
+    mutationFn: resetPassword,
+  });
 
   const onSubmit = (data: ResetPasswordInput) => {
-    resetPassword.mutate(data);
+    mutation.mutate(data);
   };
 
   return (
@@ -37,20 +40,22 @@ export function ResetPasswordForm() {
         />
       </div>
 
-      {resetPassword.error && (
+      {mutation.error && (
         <div className="text-sm text-red-500">
-          {resetPassword.error.message}
+          {mutation.error
+            ? mutation.error.message
+            : "Failed to send reset password email"}
         </div>
       )}
 
-      {resetPassword.isSuccess && (
+      {mutation.isSuccess && (
         <div className="text-sm text-green-500">
           Password reset instructions have been sent to your email.
         </div>
       )}
 
-      <Button type="submit" disabled={resetPassword.isPending}>
-        {resetPassword.isPending ? "Sending..." : "Reset Password"}
+      <Button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? "Sending..." : "Reset Password"}
       </Button>
     </form>
   );

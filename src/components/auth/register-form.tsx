@@ -3,11 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { useSignUp } from "@/lib/hooks/use-auth";
-import { registerSchema, type RegisterInput } from "@/lib/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import {
+  registerSchema,
+  type RegisterInput,
+} from "~/lib/validations/authValidations";
+import {
+  RegisterFormInputs,
+  registerUser,
+} from "../../lib/services/auth.service";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -20,15 +27,15 @@ export function RegisterForm() {
     resolver: zodResolver(registerSchema),
   });
 
-  const signUp = useSignUp();
-
-  const onSubmit = async (data: RegisterInput) => {
-    try {
-      await signUp.mutateAsync(data);
+  const mutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
       router.push("/register/success");
-    } catch (error) {
-      console.error(error);
-    }
+    },
+  });
+
+  const onSubmit = async (data: RegisterFormInputs) => {
+    mutation.mutate(data);
   };
 
   return (
@@ -61,12 +68,12 @@ export function RegisterForm() {
         />
       </div>
 
-      {signUp.error && (
-        <div className="text-sm text-red-500">{signUp.error.message}</div>
+      {!!mutation.error && (
+        <div className="text-sm text-red-500">{mutation.error.message}</div>
       )}
 
-      <Button type="submit" disabled={signUp.isPending}>
-        {signUp.isPending ? "Creating account..." : "Create account"}
+      <Button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? "Creating account..." : "Create account"}
       </Button>
     </form>
   );

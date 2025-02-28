@@ -1,10 +1,10 @@
 "use client";
 
-import { authService } from "@/lib/services/auth";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { authService } from "~/lib/services/auth.service";
 import { primaryButtonStyles } from "../../../components/ui/Button/Button.styles";
 
 export default function ConfirmEmailPage() {

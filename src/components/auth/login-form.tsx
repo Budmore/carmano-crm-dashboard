@@ -3,17 +3,23 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { useResendVerification, useSignIn } from "@/lib/hooks/use-auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import {
   AuthErrorCode,
-  loginSchema,
+  login,
   type AuthError,
+} from "~/lib/services/auth.service";
+import {
+  loginSchema,
   type LoginInput,
-} from "@/lib/services/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+} from "~/lib/validations/authValidations";
+import { ResendVerification } from "./resend-verification";
 
 export function LoginForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -23,20 +29,18 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const signIn = useSignIn();
-  const resendVerification = useResendVerification();
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      router.push("/dashboard"); // Adjust the redirect path as needed
+    },
+  });
 
   const onSubmit = (data: LoginInput) => {
-    signIn.mutate(data);
+    loginMutation.mutate(data);
   };
 
-  const handleResendVerification = () => {
-    const error = signIn.error as AuthError | null;
-    if (!error || error.code !== AuthErrorCode.UNVERIFIED_EMAIL) return;
-    resendVerification.mutate({ email: getValues("email") });
-  };
-
-  const error = signIn.error as AuthError | null;
+  const error = loginMutation.error as AuthError | null;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -81,106 +85,13 @@ export function LoginForm() {
           </div>
 
           {error.code === AuthErrorCode.UNVERIFIED_EMAIL && (
-            <div className="rounded-md border border-gray-200 p-4 bg-gray-50">
-              <div className="space-y-3">
-                <div className="text-sm text-gray-700">
-                  Haven't received the verification email?
-                </div>
-
-                {!resendVerification.isSuccess && (
-                  <div className="flex items-center space-x-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleResendVerification}
-                      disabled={resendVerification.isPending}
-                      fullWidth={false}
-                    >
-                      {resendVerification.isPending ? (
-                        <>
-                          <svg
-                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-violet-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            />
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            />
-                          </svg>
-                          Sending...
-                        </>
-                      ) : (
-                        "Resend verification email"
-                      )}
-                    </Button>
-                  </div>
-                )}
-
-                {resendVerification.isSuccess && (
-                  <div className="flex items-start space-x-2 text-sm">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <svg
-                        className="h-4 w-4 text-green-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1 text-green-600">
-                      Verification email sent successfully. Please check your
-                      inbox.
-                    </div>
-                  </div>
-                )}
-
-                {resendVerification.error && (
-                  <div className="flex items-start space-x-2 text-sm">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <svg
-                        className="h-4 w-4 text-red-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1 text-red-500">
-                      {resendVerification.error.message}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <ResendVerification email={getValues("email")} />
           )}
         </div>
       )}
 
-      <Button type="submit" disabled={signIn.isPending}>
-        {signIn.isPending ? "Signing in..." : "Sign in"}
+      <Button type="submit" disabled={loginMutation.isPending}>
+        {loginMutation.isPending ? "Signing in..." : "Sign in"}
       </Button>
     </form>
   );
