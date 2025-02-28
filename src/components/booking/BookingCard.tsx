@@ -1,3 +1,5 @@
+import { customersMap, vehiclesMap } from "@/mock-data/mockBookings";
+import { Booking } from "@/services/bookings/bookings.types";
 import { format } from "date-fns/format";
 import {
   Calendar,
@@ -13,8 +15,7 @@ import {
   Trash2,
   XCircle,
 } from "lucide-react";
-import { customersMap, vehiclesMap } from "~/mock-data/mockBookings";
-import { Booking } from "~/services/bookings/bookings.types";
+import Image from "next/image";
 
 interface BookingCardProps {
   booking: Booking;
@@ -96,10 +97,12 @@ export function BookingCard({
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="flex items-center gap-4">
           {mainImage && (
-            <img
+            <Image
               src={mainImage.url}
               alt={vehicle.name}
               className="w-20 h-20 rounded-lg object-cover"
+              width={80}
+              height={80}
             />
           )}
           <div>

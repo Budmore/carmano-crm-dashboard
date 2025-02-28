@@ -1,22 +1,23 @@
 "use client";
 
+import { confirmEmail } from "@/lib/services/auth.service";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { authService } from "~/lib/services/auth.service";
 import { primaryButtonStyles } from "../../../components/ui/Button/Button.styles";
 
 export default function ConfirmEmailPage() {
   const searchParams = useSearchParams();
+
   const router = useRouter();
-  const token = searchParams.get("token");
+  const token = searchParams?.get("token");
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["confirmEmail", token],
     queryFn: () => {
       if (!token) throw new Error("No token provided");
-      return authService.confirmEmail(token);
+      return confirmEmail(token);
     },
     enabled: !!token,
     retry: false,

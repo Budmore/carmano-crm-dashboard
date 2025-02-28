@@ -3,19 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import {
   AuthErrorCode,
   login,
   type AuthError,
-} from "~/lib/services/auth.service";
+} from "@/lib/services/auth.service";
 import {
   loginSchema,
   type LoginInput,
-} from "~/lib/validations/authValidations";
+} from "@/lib/validations/authValidations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { ResendVerification } from "./resend-verification";
 
 export function LoginForm() {

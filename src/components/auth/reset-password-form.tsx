@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { resetPassword } from "~/lib/services/auth.service";
+import { resetPassword } from "@/lib/services/auth.service";
 import {
   resetPasswordSchema,
   type ResetPasswordInput,
-} from "~/lib/validations/authValidations";
+} from "@/lib/validations/authValidations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 
 export function ResetPasswordForm() {
   const {

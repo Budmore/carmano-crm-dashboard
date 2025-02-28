@@ -306,7 +306,7 @@ export function BookingCalendar() {
         <div className="mt-8">
           <h2 className="text-lg font-semibold mb-4">Camper Bookings</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {["V001", "V002", "V003"].map((camper, index) => {
+            {["V001", "V002", "V003"].map((camper) => {
               const camperBookings = bookings.filter(
                 (b) => b.camper === camper
               );

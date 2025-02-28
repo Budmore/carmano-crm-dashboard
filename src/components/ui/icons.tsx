@@ -1,10 +1,11 @@
 import {
+  Eye,
+  EyeClosed,
   Loader2,
+  LucideIcon,
   Moon,
   SunMedium,
   Twitter,
-  Eye,
-  EyeClosed,
 } from "lucide-react";
 
 export type Icon = LucideIcon;

@@ -1,3 +1,4 @@
+import type { Booking } from "@/services/bookings/bookings.types";
 import {
   Calendar,
   Clock,
@@ -8,7 +9,6 @@ import {
   User,
   X,
 } from "lucide-react";
-import type { Booking } from "~/services/bookings/bookings.types";
 
 interface BookingFormProps {
   isOpen: boolean;

@@ -3,18 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { RegisterFormInputs, registerUser } from "@/lib/services/auth.service";
+import {
+  registerSchema,
+  type RegisterInput,
+} from "@/lib/validations/authValidations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import {
-  registerSchema,
-  type RegisterInput,
-} from "~/lib/validations/authValidations";
-import {
-  RegisterFormInputs,
-  registerUser,
-} from "../../lib/services/auth.service";
 
 export function RegisterForm() {
   const router = useRouter();

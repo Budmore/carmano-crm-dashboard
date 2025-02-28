@@ -1,5 +1,5 @@
+import { Booking } from "@/services/bookings/bookings.types";
 import { CreditCard, FileText, Receipt, X } from "lucide-react";
-import { Booking } from "~/services/bookings/bookings.types";
 
 interface PaymentModalProps {
   isOpen: boolean;

@@ -2,7 +2,7 @@ import { DatePicker, Select } from "antd";
 import { Filter } from "lucide-react";
 import dateFnsGenerateConfig from "rc-picker/lib/generate/dateFns";
 import { NoUndefinedRangeValueType } from "rc-picker/lib/PickerInput/RangePicker";
-import { vehicles } from "~/mock-data/mockBookings";
+import { vehicles } from "@/mock-data/mockBookings";
 
 const CustomRangePicker = DatePicker.generatePicker<Date>(
   dateFnsGenerateConfig

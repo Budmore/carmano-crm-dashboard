@@ -45,7 +45,7 @@ export const Sidebar = () => {
         {navItems.map(({ icon: Icon, label, pathname: itemPath }) => (
           <Link key={itemPath} href={itemPath} className="block">
             <NavItem
-              icon={<Icon />}
+              icon={<Icon className="w-5 h-5" />}
               text={label}
               active={pathname === itemPath}
             />

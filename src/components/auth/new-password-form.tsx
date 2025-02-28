@@ -3,16 +3,16 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/Button/Button";
 import { PasswordInput } from "@/components/ui/password-input";
+import { newPassword } from "@/lib/services/auth.service";
+import {
+  NewPasswordInput,
+  newPasswordSchema,
+} from "@/lib/validations/authValidations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { newPassword } from "~/lib/services/auth.service";
-import {
-  NewPasswordInput,
-  newPasswordSchema,
-} from "~/lib/validations/authValidations";
 
 interface NewPasswordFormProps {
   token: string;

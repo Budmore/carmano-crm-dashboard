@@ -1,7 +1,7 @@
+import { BookingCard } from "@/components/booking/BookingCard";
+import { Booking } from "@/services/bookings/bookings.types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { BookingCard } from "~/pages/bookings/components/BookingCard";
-import { Booking } from "~/services/bookings/bookings.types";
 
 interface BookingListCondensedProps {
   bookings: Booking[];

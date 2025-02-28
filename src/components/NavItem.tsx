@@ -13,7 +13,7 @@ export function NavItem({ icon, text, active }: NavItemProps) {
         active ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
       }`}
     >
-      {React.cloneElement(icon as React.ReactElement, { className: "w-5 h-5" })}
+      {icon}
       <span>{text}</span>
     </button>
   );

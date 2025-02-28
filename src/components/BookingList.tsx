@@ -110,7 +110,7 @@ export function BookingList({ bookings, onSelectBooking }: BookingListProps) {
               <tr
                 key={row.id}
                 className="hover:bg-gray-50 cursor-pointer"
-                onClick={() => onSelectBooking(row.original)}
+                onClick={() => onSelectBooking?.(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td

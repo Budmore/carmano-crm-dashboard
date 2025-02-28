@@ -6,15 +6,11 @@ export const metadata: Metadata = {
   description: "Set your new password",
 };
 
-interface NewPasswordPageProps {
-  params: {
-    token: string;
-  };
-}
-
 export default async function NewPasswordPage({
   params,
-}: NewPasswordPageProps) {
+}: {
+  params: Promise<{ token: string }>;
+}) {
   const { token } = await params;
 
   return (
@@ -22,6 +18,7 @@ export default async function NewPasswordPage({
       <div className="max-w-sm w-full space-y-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Set new password</h1>
+
           <p className="mt-2 text-sm text-gray-600">
             Please enter your new password
           </p>

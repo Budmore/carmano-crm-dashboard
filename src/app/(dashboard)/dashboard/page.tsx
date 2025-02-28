@@ -1,4 +1,5 @@
 import { BookingList } from "@/components/BookingList";
+import { RecentBookings } from "@/components/dashboard/RecentBookings";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { VehicleCard } from "@/components/dashboard/VehicleCard";
 import { mockBookings } from "@/mock-data/mockBookings";
@@ -11,7 +12,6 @@ import {
 } from "lucide-react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { RecentBookings } from "~/components/dashboard/RecentBookings";
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
@@ -45,28 +45,28 @@ export default async function DashboardPage() {
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
-            icon={<DollarSign />}
+            icon={<DollarSign className="w-6 h-6 text-blue-600" />}
             title="Revenue"
             value="$24,563"
             change="+12.5%"
             positive
           />
           <StatCard
-            icon={<UserCheck />}
+            icon={<UserCheck className="w-6 h-6 text-blue-600" />}
             title="Active Rentals"
             value="48"
             change="+8.2%"
             positive
           />
           <StatCard
-            icon={<CarFront />}
+            icon={<CarFront className="w-6 h-6 text-blue-600" />}
             title="Available Vehicles"
             value="15"
             change="-2"
             positive={false}
           />
           <StatCard
-            icon={<AlertTriangle />}
+            icon={<AlertTriangle className="w-6 h-6 text-blue-600" />}
             title="Maintenance Due"
             value="3"
             change="+1"

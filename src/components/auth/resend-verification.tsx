@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { resendVerificationEmail } from "@/lib/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
-import { resendVerificationEmail } from "~/lib/services/auth.service";
 
 interface ResendVerificationProps {
   email: string;
