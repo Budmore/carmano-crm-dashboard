@@ -4,17 +4,19 @@ import {
   CheckCircle2,
   ChevronRight,
   Code,
-  Compass,
   MessageSquare,
-  Settings,
   ShoppingBag,
   Truck,
   Users,
 } from "lucide-react";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
-function App() {
+async function App() {
+  const cookieStore = await cookies();
+  const hasAccessToken = !!cookieStore.get("accessToken");
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Navigation */}
@@ -24,7 +26,7 @@ function App() {
             <div className="flex items-center">
               <Truck className="h-8 w-8 text-violet-600" />
               <span className="ml-2 text-xl font-bold text-gray-900">
-                CamperCRM
+                Carmano
               </span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -53,20 +55,31 @@ function App() {
                 Contact
               </a>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/login"
-                className="text-gray-600 hover:text-violet-600 transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                href="/sign-up"
-                className="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 transition-colors"
-              >
-                Sign Up Free
-              </Link>
-            </div>
+            {hasAccessToken ? (
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/dashboard"
+                  className="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 transition-colors"
+                >
+                  Dashboard
+                </Link>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/login"
+                  className="text-gray-600 hover:text-violet-600 transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 transition-colors"
+                >
+                  Sign Up Free
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -236,11 +249,7 @@ function App() {
               title="Marketplace Listings"
               description="List your RVs on our marketplace to reach more customers and increase your bookings."
             />
-            <FeatureCard
-              icon={<Compass className="h-8 w-8 text-violet-600" />}
-              title="Fleet Tracking"
-              description="Track the location and status of your RVs in real-time with our GPS integration."
-            />
+
             <FeatureCard
               icon={<Users className="h-8 w-8 text-violet-600" />}
               title="Customer Management"
@@ -256,11 +265,6 @@ function App() {
               title="Communication Tools"
               description="Send automated notifications, reminders, and gather feedback from customers."
             />
-            <FeatureCard
-              icon={<Settings className="h-8 w-8 text-violet-600" />}
-              title="Maintenance Tracking"
-              description="Schedule and track maintenance tasks to keep your RV fleet in top condition."
-            />
           </div>
         </div>
       </div>
@@ -270,7 +274,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900">
-              How CamperCRM Works
+              How Carmano Works
             </h2>
             <p className="mt-4 text-xl text-gray-600">
               Our platform simplifies every aspect of your RV rental business
@@ -279,17 +283,17 @@ function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <StepCard
-              number="1"
+              number={1}
               title="Set Up Your Fleet"
               description="Add your RVs, set pricing, availability, and customize booking rules."
             />
             <StepCard
-              number="2"
+              number={2}
               title="Manage Bookings"
               description="Accept reservations, process payments, and send automated confirmations."
             />
             <StepCard
-              number="3"
+              number={3}
               title="Grow Your Business"
               description="Embed your calendar on your website, list on our marketplace, and optimize operations."
             />
@@ -305,13 +309,13 @@ function App() {
               What Our Customers Say
             </h2>
             <p className="mt-4 text-xl text-gray-600">
-              Join hundreds of RV rental businesses already using CamperCRM
+              Join hundreds of RV rental businesses already using Carmano
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <TestimonialCard
-              quote="CamperCRM has transformed how we manage our fleet of 15 RVs. Bookings are up 30% and customer satisfaction has never been higher."
+              quote="Carmano has transformed how we manage our fleet of 15 RVs. Bookings are up 30% and customer satisfaction has never been higher."
               author="Sarah Johnson"
               company="Mountain View RV Rentals"
               image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
@@ -416,7 +420,7 @@ function App() {
             Ready to transform your RV rental business?
           </h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Join hundreds of successful RV rental businesses using CamperCRM to
+            Join hundreds of successful RV rental businesses using Carmano to
             streamline operations and delight customers.
           </p>
           <a
@@ -435,7 +439,7 @@ function App() {
             <div>
               <div className="flex items-center mb-4">
                 <Truck className="h-6 w-6 text-violet-400" />
-                <span className="ml-2 text-lg font-bold">CamperCRM</span>
+                <span className="ml-2 text-lg font-bold">Carmano</span>
               </div>
               <p className="text-gray-400">
                 The complete solution for RV rental businesses.
@@ -555,7 +559,7 @@ function App() {
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>
-              &copy; {new Date().getFullYear()} CamperCRM. All rights reserved.
+              &copy; {new Date().getFullYear()} Carmano. All rights reserved.
             </p>
           </div>
         </div>

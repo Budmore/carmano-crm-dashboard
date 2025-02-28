@@ -32,7 +32,7 @@ export function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: () => {
-      router.push("/dashboard"); // Adjust the redirect path as needed
+      router.push("/dashboard");
     },
   });
 

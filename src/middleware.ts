@@ -21,6 +21,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect to login if no refresh token is present
+
   if (!refreshToken) {
     const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
